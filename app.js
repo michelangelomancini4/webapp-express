@@ -7,6 +7,9 @@ const express = require('express')
 // inizializzazione express
 const app = express()
 
+// importazione per gestire env
+require('dotenv').config();
+
 // middleware per json
 app.use(express.json());
 
@@ -26,7 +29,7 @@ const moviesRouter = require('./routers/movies');
 app.use('/movies', moviesRouter);
 
 // impostazione porta
-const port = 5000
+const port = process.env.PORT
 
 
 
