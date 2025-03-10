@@ -10,6 +10,8 @@ const app = express()
 // middleware per json
 app.use(express.json());
 
+// importo array con menu
+// const menu = require('./data/postsarray');
 
 // importo il middleware per eventuali endpoint inesistenti
 const checkInexistentEndpoint = require('./middlewares/inexistentEndpoint');
@@ -18,6 +20,13 @@ const checkInexistentEndpoint = require('./middlewares/inexistentEndpoint');
 const genErrorMsg = require('./middlewares/errorMiddleware');
 
 
+
+
+// Importazione routers/movies.js
+const moviesRouter = require('./routers/movies');
+
+//registrazione path delle rotte e istanza router
+app.use('/movies', moviesRouter);
 
 // impostazione porta
 const port = 5000
@@ -28,7 +37,7 @@ app.use(express.static('public'));
 
 // impostazione rotta principale
 app.get('/', (req, res) => {
-    res.send('Server della tua webapp!!!')
+    res.send('rotta della HOME!!!')
 })
 
 
