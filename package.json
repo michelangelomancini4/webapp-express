@@ -1,0 +1,32 @@
+{
+  "name": "webapp-express",
+  "version": "1.0.0",
+  "description": "webapp-backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "watch": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michelangelomancini4/webapp-express.git"
+  },
+  "keywords": [
+    "movies",
+    "reviews",
+    "webapp",
+    "express",
+    "node"
+  ],
+  "author": "michelangelo mancini",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michelangelomancini4/webapp-express/issues"
+  },
+  "homepage": "https://github.com/michelangelomancini4/webapp-express#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.13.0"
+  }
+}
