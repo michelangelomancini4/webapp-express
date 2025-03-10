@@ -10,17 +10,14 @@ const app = express()
 // middleware per json
 app.use(express.json());
 
-// importo array con menu
-// const menu = require('./data/postsarray');
+// importo lista film
+const movie = require('./controllers/moviesController');
 
 // importo il middleware per eventuali endpoint inesistenti
 const checkInexistentEndpoint = require('./middlewares/inexistentEndpoint');
 
 // importo il middleware per generare messaggio di errore
 const genErrorMsg = require('./middlewares/errorMiddleware');
-
-
-
 
 // Importazione routers/movies.js
 const moviesRouter = require('./routers/movies');
@@ -31,8 +28,6 @@ app.use('/movies', moviesRouter);
 // impostazione porta
 const port = 5000
 
-// configurazione asset statico
-app.use(express.static('public'));
 
 
 // impostazione rotta principale
@@ -40,7 +35,12 @@ app.get('/', (req, res) => {
     res.send('rotta della HOME!!!')
 })
 
+// rotta per le schede di dettaglio film
+app.get("/infofilm", movie.index);
 
+
+// configurazione asset statico
+app.use(express.static('public'));
 
 // uso middleware nel caso si inseriscano endpoint inesistenti
 app.use(checkInexistentEndpoint);

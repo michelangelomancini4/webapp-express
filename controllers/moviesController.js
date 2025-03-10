@@ -1,6 +1,5 @@
-// importazione menu
+// importo menu
 const { json } = require('express');
-// const menu = require('../data/postsarray');
 
 // importo db 
 const connection = require('../data/db');
@@ -10,7 +9,7 @@ function index(req, res) {
 
     const sql = 'SELECT * FROM movies';
 
-    // eseguo la query
+    // eseguo la query per farmi ritornare la lista di tutti i film
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
         res.json(results);
@@ -20,36 +19,49 @@ function index(req, res) {
 // logica  SHOW
 function show(req, res) {
 
+    // recupero l'id
     const id = parseInt(req.params.id)
 
-    // preparo la query 
+    // preparo la query per recuperare i dati del singolo film (prendo solo i dati db di movies)
     const movieSql = 'SELECT * FROM movies WHERE id = ?';
 
-    // Preparo la query per gli ingredienti con dati del presi dal database
-    const ingredientsSql = `
-    SELECT tags.label
-    FROM tags 
-    JOIN post_tag  ON tags.id = post_tag.tag_id
-    WHERE post_tag.post_id = ?
+    // Preparo la query per le reviews con dati del presi dal database (prendo solo i dati db di reviews)
+    const reviewsSql = `
+    SELECT *
+    FROM reviews
+    WHERE movie_id = ?
     `;
+
+
     // Eseguo la prima query 
 
-    connection.query(postSql, [id], (err, postResults) => {
+    connection.query(movieSql, [id], (err, movieResults) => {
 
         if (err) return res.status(500).json({ error: 'Database query failed' });
-        if (postResults.length === 0) return res.status(404).json({ error: 'Post not found' });
+        if (movieResults.length === 0) return res.status(404).json({ error: 'movie not found' });
 
-        // Recupero il post
-        const post = postResults[0];
 
-        // Se è andata bene, eseguo la seconda query per gli ingredienti
-        connection.query(ingredientsSql, [id], (err, ingredientsResults) => {
+
+        // output con i dati del singolo film (solo ocn dati di movies)
+        const movie = movieResults[0];
+
+        // eseguo la query per recuperare i dati di reviews
+
+        connection.query(reviewsSql, [id], (err, reviewResults) => {
+
             if (err) return res.status(500).json({ error: 'Database query failed' });
 
-            // Aggiungo gli ingredienti al post
-            post.ingredients = ingredientsResults;
-            res.json(post);
+            // aggiorno i dati del film con l'aggiunta dei dati di review
+
+            movie.reviews = reviewResults
+
+            // ritorno i dati del film aggiornati
+            res.json(movie);
+
         });
+
+
+
     });
 
 }
@@ -75,7 +87,7 @@ function destroy(req, res) {
     // conversione ID da stringa a numero con parseInt
     const id = parseInt(req.params.id)
 
-    //Eliminiamo il post dal menu
+    //Elimino dalla lista film
     connection.query('DELETE FROM movies WHERE id = ?', [id], (err) => {
         if (err) return res.status(500).json({ error: 'Failed to delete movie' });
         res.sendStatus(204)
