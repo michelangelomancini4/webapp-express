@@ -1,6 +1,3 @@
-// console log di prova
-console.log('app.js si  avvia correttamente!');
-
 // importazione express
 const express = require('express')
 
@@ -22,6 +19,15 @@ const checkInexistentEndpoint = require('./middlewares/inexistentEndpoint');
 // importo il middleware per generare messaggio di errore
 const genErrorMsg = require('./middlewares/errorMiddleware');
 
+
+// cors
+const cors = require("cors");
+
+// middleware per cors
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
+
 // Importazione routers/movies.js
 const moviesRouter = require('./routers/movies');
 
@@ -32,7 +38,7 @@ app.use('/movies', moviesRouter);
 const port = process.env.PORT
 
 
-
+// ROTTE
 // impostazione rotta principale
 app.get('/', (req, res) => {
     res.send('rotta della HOME!!!')
@@ -57,5 +63,7 @@ app.listen(port, () => {
     console.log(`Server in ascolto sulla porta: ${port}`)
 })
 
+// console log di prova
+console.log('app.js si  avvia correttamente!');
 
 

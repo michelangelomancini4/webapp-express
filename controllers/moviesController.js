@@ -1,4 +1,3 @@
-// importo menu
 const { json } = require('express');
 
 // importo db 
@@ -99,3 +98,5 @@ function destroy(req, res) {
 module.exports = { index, show, destroy }
 
 
+// console log di prova
+console.log('moviesController.js si avvia correttamente!');
