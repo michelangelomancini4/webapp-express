@@ -11,7 +11,18 @@ function index(req, res) {
     // eseguo la query per farmi ritornare la lista di tutti i film
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
-        res.json(results);
+
+
+        // mappo il risultato per generare 'movie' che sarà aggiornato con la proprietà 'image'
+        const movies = results.map(movie => {
+            return {
+                ...movie,
+                image: req.imagePath + movie.image
+            }
+        })
+
+        // se tutto funziona restituisco 'movies' aggiornato
+        res.json(movies);
     })
 };
 
@@ -41,7 +52,7 @@ function show(req, res) {
 
 
 
-        // output con i dati del singolo film (solo ocn dati di movies)
+        // output con i dati del singolo film (solo con dati di movies)
         const movie = movieResults[0];
 
         // eseguo la query per recuperare i dati di reviews
@@ -53,6 +64,10 @@ function show(req, res) {
             // aggiorno i dati del film con l'aggiunta dei dati di review
 
             movie.reviews = reviewResults
+
+            // aggiorno i dati del film con l'aggiunta delle immagini
+
+            movie.image = req.imagePath + movie.image
 
             // ritorno i dati del film aggiornati
             res.json(movie);
