@@ -19,16 +19,24 @@ const checkInexistentEndpoint = require('./middlewares/inexistentEndpoint');
 // importo il middleware per generare messaggio di errore
 const genErrorMsg = require('./middlewares/errorMiddleware');
 
+// importo il middleware di gestione del path immagini 
+const imagePathMiddleware = require('./middlewares/imagePath');
+
 
 // cors
 const cors = require("cors");
+
+
 
 // middleware per cors
 app.use(cors({
     origin: 'http://localhost:5173'
 }));
 
-// Importazione routers/movies.js
+// registro il middleware di gestione del path immagini 
+app.use(imagePathMiddleware);
+
+// Importo routers/movies.js
 const moviesRouter = require('./routers/movies');
 
 //registrazione path delle rotte e istanza router
