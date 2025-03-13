@@ -1,18 +1,13 @@
-// importazione express
+// importo express
 const express = require('express')
 
-// inizializzazione express
-const app = express()
+// importo cors
+const cors = require("cors");
 
-// importazione per gestire env
+// importo per gestire env
 require('dotenv').config();
 
-// middleware per json
-app.use(express.json());
-
-// importo lista film
-const movie = require('./controllers/moviesController');
-
+// importazioni middlewares
 // importo il middleware per eventuali endpoint inesistenti
 const checkInexistentEndpoint = require('./middlewares/inexistentEndpoint');
 
@@ -22,29 +17,32 @@ const genErrorMsg = require('./middlewares/errorMiddleware');
 // importo il middleware di gestione del path immagini 
 const imagePathMiddleware = require('./middlewares/imagePath');
 
-
-// cors
-const cors = require("cors");
-
-
-
-// middleware per cors
-app.use(cors({
-    origin: 'http://localhost:5173'
-}));
-
-// registro il middleware di gestione del path immagini 
-app.use(imagePathMiddleware);
-
 // Importo routers/movies.js
 const moviesRouter = require('./routers/movies');
 
-//registrazione path delle rotte e istanza router
-app.use('/movies', moviesRouter);
+// importo lista film
+const movie = require('./controllers/moviesController');
+
+// inizializzazione express
+const app = express()
 
 // impostazione porta
 const port = process.env.PORT
 
+
+// middleware per json
+app.use(express.json());
+
+// middleware per cors
+app.use(cors({ origin: process.env.FE_APP }))
+
+// registro il middleware di gestione del path immagini 
+app.use(imagePathMiddleware);
+
+
+
+//registrazione path delle rotte e istanza router
+app.use('/movies', moviesRouter);
 
 // ROTTE
 // impostazione rotta principale
@@ -56,8 +54,6 @@ app.get('/', (req, res) => {
 app.get("/infofilm", movie.index);
 
 
-// configurazione asset statico
-app.use(express.static('public'));
 
 // uso middleware nel caso si inseriscano endpoint inesistenti
 app.use(checkInexistentEndpoint);
