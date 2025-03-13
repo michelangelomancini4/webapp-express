@@ -54,6 +54,9 @@ app.get('/', (req, res) => {
 app.get("/infofilm", movie.index);
 
 
+// configurazione asset statico
+app.use(express.static('public'));
+
 
 // uso middleware nel caso si inseriscano endpoint inesistenti
 app.use(checkInexistentEndpoint);
