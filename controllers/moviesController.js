@@ -80,9 +80,24 @@ function show(req, res) {
 
 }
 
-// logica  STORE
-function store(req, res) {
+// logica  STORE - inserimento nuova recensione film
+function storeReview(req, res) {
 
+    // estrapolo id dai parametri
+    const { id } = req.params;
+
+    // estrapolo i dati che mi interessano dal req.body
+    const { text, name, vote } = req.body;
+
+    // creo costante per inserire i nuovi valori nel database
+    const insertReviewSql = 'INSERT INTO reviews (text, name, vote, movie_id) VALUES (?, ?, ?, ?)'
+
+    // Esecuzione della query
+    connection.query(insertReviewSql, [text, name, vote, id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+        res.status(201);
+        res.json({ message: 'Review added', id: results.insertId });
+    });
 
 
 }
@@ -109,8 +124,8 @@ function destroy(req, res) {
 
 }
 
-// esportiamo tutto
-module.exports = { index, show, destroy }
+
+module.exports = { index, show, storeReview }
 
 
 // console log di prova

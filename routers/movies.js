@@ -6,16 +6,15 @@ const moviesController = require('../controllers/moviesController');
 
 // rotte per le operazioni CRUD 
 
-// INDEX
+// INDEX 
 router.get('/', moviesController.index);
 
 // SHOW
 router.get('/:id', moviesController.show);
 
 
-// STORE
-router.post('/');
-
+// STORE (per aggiungere nuove recensioni)
+router.post('/:id/reviews', moviesController.storeReview);
 
 // UPDATE
 router.put('/:id');
