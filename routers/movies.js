@@ -4,6 +4,9 @@ const router = express.Router();
 // importo il controller
 const moviesController = require('../controllers/moviesController');
 
+// importo middelware per la gestione file
+const upload = require('../middlewares/multer');
+
 // rotte per le operazioni CRUD 
 
 // INDEX 
@@ -13,8 +16,11 @@ router.get('/', moviesController.index);
 router.get('/:id', moviesController.show);
 
 
-// STORE (per aggiungere nuove recensioni)
+// STORE REVIEW (per aggiungere nuove recensioni)
 router.post('/:id/reviews', moviesController.storeReview);
+
+// STORE MOVIE
+router.post('/', upload.single('image'), moviesController.store);
 
 // UPDATE
 router.put('/:id');

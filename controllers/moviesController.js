@@ -103,6 +103,35 @@ function storeReview(req, res) {
 }
 
 
+
+// logica  STORE movie - inserimento nuovo film con tutti i dati
+function store(req, res, next) {
+
+    // estrapolo i dati che mi interessano dal req.body
+    const { title, director, image, abstract, genre, release_year } = req.body;
+
+    // gestisco il valore del nome file creato dal middleware
+    const imageName = `${req.file.filename}`;
+
+    // creo la query con insert
+    const query = "INSERT INTO movies (title, director, image, abstract, genre , release_year) VALUES (?, ?, ?, ?, ?, ?)";
+
+    connection.query(query,
+        [title, director, imageName, abstract, genre, release_year],
+        (err, result) => {
+            if (err) {
+                console.log(err)
+                return next(new Error("Internal server error"));
+            }
+
+            res.status(201).json({
+                status: "success",
+                message: "film aggiunto con successo!",
+            });
+        })
+}
+
+
 //  logica UPDATE
 function update(req, res) {
 
@@ -125,7 +154,7 @@ function destroy(req, res) {
 }
 
 
-module.exports = { index, show, storeReview }
+module.exports = { index, show, storeReview, store }
 
 
 // console log di prova
